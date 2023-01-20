@@ -93,7 +93,7 @@ function markSellBid(price,volume)
 
         YVALUE   = tonumber(price),
         DATE     = os.date("%Y%m%d"),
-        TIME     = date.hour..date.min.."00",
+        TIME     = string.format("%02d%02d00" , date.hour,date.min),
 
         R              = 255,
         G              = 0,
@@ -117,7 +117,7 @@ function markBuyBid(price,volume)
 
         YVALUE   = tonumber(price),
         DATE     = os.date("%Y%m%d"),
-        TIME     = date.hour..date.min.."00",
+        TIME     = string.format("%02d%02d00" , date.hour,date.min),
 
         R              = 0,
         G              = 255,
@@ -141,7 +141,7 @@ function markSellTrade(price,volume)
 
         YVALUE   = tonumber(price),
         DATE     = os.date("%Y%m%d"),
-        TIME     = date.hour..date.min.."00",
+        TIME     = string.format("%02d%02d00" , date.hour,date.min),
 
         R              = 255,
         G              = 255,
@@ -165,7 +165,7 @@ function markBuyTrade(price,volume)
 
         YVALUE   = tonumber(price),
         DATE     = os.date("%Y%m%d"),
-        TIME     = date.hour..date.min.."00",
+        TIME     = string.format("%02d%02d00" , date.hour,date.min),
 
         R              = 0,
         G              = 150,
