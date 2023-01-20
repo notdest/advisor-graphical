@@ -1,0 +1,1 @@
+DelAllLabels("share")
