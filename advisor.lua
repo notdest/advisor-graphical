@@ -4,7 +4,7 @@ config  = {
     class       = "TQBR",
     sec         = "SBER",
     minTrade    = 100,          -- Минимальная сделка отображаемая на графике
-    minBid      = 1000          -- Минимальная ставка в стакане, отображаемая на графике
+    minQuote    = 1000          -- Минимальная ставка в стакане, отображаемая на графике
 }
 
 is_run = true
@@ -19,8 +19,8 @@ function main()
             BTPrice,BTQuantity = buys:getMaxTrade()
 
 
-            SBPrice,SBQuantity = sales:getMaxBid()
-            BBPrice,BBQuantity = buys:getMaxBid()
+            SBPrice,SBQuantity = sales:getMaxQuote()
+            BBPrice,BBQuantity = buys:getMaxQuote()
 
             if STQuantity > config.minTrade then
                 markSellTrade(STPrice, STQuantity)
@@ -30,12 +30,12 @@ function main()
                 markBuyTrade(BTPrice, BTQuantity)
             end
 
-            if SBQuantity > config.minBid then
-                markSellBid(SBPrice, SBQuantity)
+            if SBQuantity > config.minQuote then
+                markSellQuote(SBPrice, SBQuantity)
             end
 
-            if BBQuantity > config.minBid then
-                markBuyBid(BBPrice, BBQuantity)
+            if BBQuantity > config.minQuote then
+                markBuyQuote(BBPrice, BBQuantity)
             end
 
             sales:clear()
@@ -51,11 +51,11 @@ function OnQuote(class, sec )
     if class == config.class and sec == config.sec then
         local quotes = getQuoteLevel2 ( config.class , config.sec)
         for k, v in pairs(quotes.bid) do
-            buys:addBid(v.price,tonumber(v.quantity))
+            buys:addQuote(v.price,tonumber(v.quantity))
         end
 
         for k, v in pairs(quotes.offer) do
-            sales:addBid(v.price,tonumber(v.quantity))
+            sales:addQuote(v.price,tonumber(v.quantity))
         end
     end
 end
@@ -83,7 +83,7 @@ end
 
 
 
-function markSellBid(price,volume)
+function markSellQuote(price,volume)
     date    = os.date("*t",os.time()-30)
     AddLabel("share",{
         TEXT        = math.floor(volume/1000)..'',
@@ -107,7 +107,7 @@ function markSellBid(price,volume)
       })
 end
 
-function markBuyBid(price,volume)
+function markBuyQuote(price,volume)
     date    = os.date("*t",os.time()-30)
     AddLabel("share",{
         TEXT        = math.floor(volume/1000)..'',

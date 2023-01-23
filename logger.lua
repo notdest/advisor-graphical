@@ -8,7 +8,7 @@ logger = {}
 function logger:new()
     newObj = {
         trades      = {},
-        bids        = {}
+        quotes      = {}
     }
 
 
@@ -25,9 +25,9 @@ function logger:addTrade(price,quantity)
     end
 end
 
-function logger:addBid(price,quantity)
-    if self.bids[price] == nil or self.bids[price] < quantity then
-        self.bids[price] = quantity
+function logger:addQuote(price,quantity)
+    if self.quotes[price] == nil or self.quotes[price] < quantity then
+        self.quotes[price] = quantity
     end
 end
 
@@ -44,10 +44,10 @@ function logger:getMaxTrade()
     return priceMax, quantityMax
 end
 
-function logger:getMaxBid()
+function logger:getMaxQuote()
     local priceMax      = 0
     local quantityMax   = 0
-    for price, quantity in pairs(self.bids) do
+    for price, quantity in pairs(self.quotes) do
         if quantity > quantityMax then
             quantityMax = quantity
             priceMax    = price
@@ -58,12 +58,12 @@ function logger:getMaxBid()
 end
 
 -- Возвращает "центр масс" - среднюю цену и сумму котировок
-function logger:getCenterBid()
+function logger:getCenterQuote()
     local centerPrice   = 0
     local quantitySum   = 0
     local weightedSum   = 0
 
-    for price, quantity in pairs(self.bids) do
+    for price, quantity in pairs(self.quotes) do
         quantitySum = quantitySum + quantity
         weightedSum = weightedSum + price*quantity
     end
@@ -100,9 +100,9 @@ function logger:printTrades()
 end
 
 -- Отладочная функция
-function logger:printBids()
+function logger:printQuotes()
     message(" ")
-    for price, quantity in pairs(self.bids) do
+    for price, quantity in pairs(self.quotes) do
         message(price..": "..quantity)
     end
 end
@@ -110,5 +110,5 @@ end
 -- мы периодически обнуляем накопленное
 function logger:clear()
     self.trades = {}
-    self.bids   = {}
+    self.quotes = {}
 end
