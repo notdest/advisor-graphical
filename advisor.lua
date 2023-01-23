@@ -11,18 +11,19 @@ config  = {
 is_run = true
 
 function main()
-    local seconds = 0
+    local lastSec = 0
 
     while is_run do
         date    = os.date("*t")
-        if seconds > date.sec then
+        sec     = tonumber(date.sec)
+        if (sec < 1) and (lastSec > 0) then
             drawMaxTrades()
             drawMaxQuotes()
 
             sales:clear()
             buys:clear()
         end
-        seconds = date.sec
+        lastSec = sec
 
         sleep(400)
     end
@@ -57,12 +58,17 @@ end
 function OnQuote(class, sec )
     if class == config.class and sec == config.sec then
         local quotes = getQuoteLevel2 ( config.class , config.sec)
-        for k, v in pairs(quotes.bid) do
-            buys:addQuote(v.price,v.quantity)
+        if quotes.bid ~= nil and quotes.bid ~= "" then
+            message(quotes.bid)
+            for k, v in pairs(quotes.bid) do
+                buys:addQuote(v.price,v.quantity)
+            end
         end
 
-        for k, v in pairs(quotes.offer) do
-            sales:addQuote(v.price,v.quantity)
+        if quotes.offer ~= nil and quotes.offer ~= "" then
+            for k, v in pairs(quotes.offer) do
+                sales:addQuote(v.price,v.quantity)
+            end
         end
     end
 end
