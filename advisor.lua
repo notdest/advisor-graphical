@@ -1,4 +1,5 @@
 dofile (getScriptPath() .. "\\logger.lua")
+dofile (getScriptPath() .. "\\markFunctions.lua")
 
 config  = {
     class       = "TQBR",
@@ -15,28 +16,8 @@ function main()
     while is_run do
         date    = os.date("*t")
         if seconds > date.sec then
-            STPrice,STQuantity = sales:getMaxTrade()
-            BTPrice,BTQuantity = buys:getMaxTrade()
-
-
-            SBPrice,SBQuantity = sales:getMaxQuote()
-            BBPrice,BBQuantity = buys:getMaxQuote()
-
-            if STQuantity > config.minTrade then
-                markSellTrade(STPrice, STQuantity)
-            end
-
-            if BTQuantity > config.minTrade then
-                markBuyTrade(BTPrice, BTQuantity)
-            end
-
-            if SBQuantity > config.minQuote then
-                markSellQuote(SBPrice, SBQuantity)
-            end
-
-            if BBQuantity > config.minQuote then
-                markBuyQuote(BBPrice, BBQuantity)
-            end
+            drawMaxTrades()
+            drawMaxQuotes()
 
             sales:clear()
             buys:clear()
@@ -44,6 +25,32 @@ function main()
         seconds = date.sec
 
         sleep(400)
+    end
+end
+
+-- Выясняет и рисует максимальные котировки
+function drawMaxQuotes()
+    local price,quantity = sales:getMaxQuote()
+    if quantity > config.minQuote then
+        markSellQuote(price, quantity)
+    end
+
+    price,quantity = buys:getMaxQuote()
+    if quantity > config.minQuote then
+        markBuyQuote(price, quantity)
+    end
+end
+
+-- выясняет и рисует максимальные сделки
+function drawMaxTrades()
+    local price,quantity = sales:getMaxTrade()
+    if quantity > config.minTrade then
+        markSellTrade(price, quantity)
+    end
+
+    price,quantity = buys:getMaxTrade()
+    if quantity > config.minTrade then
+        markBuyTrade(price, quantity)
     end
 end
 
@@ -77,104 +84,4 @@ end
 
 function OnStop()
     is_run = false
-end
-
-
-
-
-
-function markSellQuote(price,volume)
-    date    = os.date("*t",os.time()-30)
-    AddLabel("share",{
-        TEXT        = math.floor(volume/1000)..'',
-        IMAGE_PATH  = "",
-        
-        ALIGNMENT   = "TOP",
-
-        YVALUE   = tonumber(price),
-        DATE     = os.date("%Y%m%d"),
-        TIME     = string.format("%02d%02d00" , date.hour,date.min),
-
-        R              = 255,
-        G              = 0,
-        B              = 0,
-        TRANSPARENCY   = 0,
-
-        TRANSPARENT_BACKGROUND  = 1,
-        FONT_FACE_NAME          = "Arial",
-        FONT_HEIGHT             = 9,
-        HINT                    = "Заявка продажа "..price..":"..volume,
-      })
-end
-
-function markBuyQuote(price,volume)
-    date    = os.date("*t",os.time()-30)
-    AddLabel("share",{
-        TEXT        = math.floor(volume/1000)..'',
-        IMAGE_PATH  = "",
-        
-        ALIGNMENT   = "BOTTOM",
-
-        YVALUE   = tonumber(price),
-        DATE     = os.date("%Y%m%d"),
-        TIME     = string.format("%02d%02d00" , date.hour,date.min),
-
-        R              = 0,
-        G              = 255,
-        B              = 0,
-        TRANSPARENCY   = 0,
-
-        TRANSPARENT_BACKGROUND  = 1,
-        FONT_FACE_NAME          = "Arial",
-        FONT_HEIGHT             = 9,
-        HINT                    = "Заявка покупка "..price..":"..volume,
-      })
-end
-
-function markSellTrade(price,volume)
-    date    = os.date("*t",os.time()-30)
-    AddLabel("share",{
-        TEXT        = math.floor(volume/1000)..'',
-        IMAGE_PATH  = "",
-        
-        ALIGNMENT   = "TOP",
-
-        YVALUE   = tonumber(price),
-        DATE     = os.date("%Y%m%d"),
-        TIME     = string.format("%02d%02d00" , date.hour,date.min),
-
-        R              = 255,
-        G              = 255,
-        B              = 0,
-        TRANSPARENCY   = 0,
-
-        TRANSPARENT_BACKGROUND  = 1,
-        FONT_FACE_NAME          = "Arial",
-        FONT_HEIGHT             = 9,
-        HINT                    = "Сделка продажа "..price..":"..volume,
-      })
-end
-
-function markBuyTrade(price,volume)
-    date    = os.date("*t",os.time()-30)
-    AddLabel("share",{
-        TEXT        = math.floor(volume/1000)..'',
-        IMAGE_PATH  = "",
-        
-        ALIGNMENT   = "BOTTOM",
-
-        YVALUE   = tonumber(price),
-        DATE     = os.date("%Y%m%d"),
-        TIME     = string.format("%02d%02d00" , date.hour,date.min),
-
-        R              = 0,
-        G              = 150,
-        B              = 255,
-        TRANSPARENCY   = 0,
-
-        TRANSPARENT_BACKGROUND  = 1,
-        FONT_FACE_NAME          = "Arial",
-        FONT_HEIGHT             = 9,
-        HINT                    = "Сделка покупка "..price..":"..volume,
-      })
 end
