@@ -57,6 +57,40 @@ function logger:getMaxBid()
     return priceMax, quantityMax
 end
 
+-- Возвращает "центр масс" - среднюю цену и сумму котировок
+function logger:getCenterBid()
+    local centerPrice   = 0
+    local quantitySum   = 0
+    local weightedSum   = 0
+
+    for price, quantity in pairs(self.bids) do
+        quantitySum = quantitySum + quantity
+        weightedSum = weightedSum + price*quantity
+    end
+
+    centerPrice = weightedSum/quantitySum
+    centerPrice = math.floor(centerPrice*100 + 0.5)/100
+
+    return centerPrice, quantitySum
+end
+
+-- Возвращает "центр масс" - среднюю цену и сумму сделок
+function logger:getCenterTrade()
+    local centerPrice   = 0
+    local quantitySum   = 0
+    local weightedSum   = 0
+
+    for price, quantity in pairs(self.trades) do
+        quantitySum = quantitySum + quantity
+        weightedSum = weightedSum + price*quantity
+    end
+
+    centerPrice = weightedSum/quantitySum
+    centerPrice = math.floor(centerPrice*100 + 0.5)/100
+
+    return centerPrice, quantitySum
+end
+
 -- Отладочная функция
 function logger:printTrades()
     message(" ")
