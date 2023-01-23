@@ -18,6 +18,9 @@ end
 
 
 function logger:addTrade(price,quantity)
+    price    = tonumber(price)
+    quantity = tonumber(quantity)
+
     if self.trades[price] == nil then
         self.trades[price]  = quantity
     else
@@ -26,6 +29,8 @@ function logger:addTrade(price,quantity)
 end
 
 function logger:addQuote(price,quantity)
+    price    = tonumber(price)
+    quantity = tonumber(quantity)
     if self.quotes[price] == nil or self.quotes[price] < quantity then
         self.quotes[price] = quantity
     end

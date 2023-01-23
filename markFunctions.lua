@@ -8,7 +8,7 @@ function markSellQuote(price,volume)
         
         ALIGNMENT   = "TOP",
 
-        YVALUE   = tonumber(price),
+        YVALUE   = price,
         DATE     = os.date("%Y%m%d"),
         TIME     = string.format("%02d%02d00" , date.hour,date.min),
 
@@ -32,7 +32,7 @@ function markBuyQuote(price,volume)
         
         ALIGNMENT   = "BOTTOM",
 
-        YVALUE   = tonumber(price),
+        YVALUE   = price,
         DATE     = os.date("%Y%m%d"),
         TIME     = string.format("%02d%02d00" , date.hour,date.min),
 
@@ -56,7 +56,7 @@ function markSellTrade(price,volume)
         
         ALIGNMENT   = "TOP",
 
-        YVALUE   = tonumber(price),
+        YVALUE   = price,
         DATE     = os.date("%Y%m%d"),
         TIME     = string.format("%02d%02d00" , date.hour,date.min),
 
@@ -80,7 +80,7 @@ function markBuyTrade(price,volume)
         
         ALIGNMENT   = "BOTTOM",
 
-        YVALUE   = tonumber(price),
+        YVALUE   = price,
         DATE     = os.date("%Y%m%d"),
         TIME     = string.format("%02d%02d00" , date.hour,date.min),
 

@@ -58,11 +58,11 @@ function OnQuote(class, sec )
     if class == config.class and sec == config.sec then
         local quotes = getQuoteLevel2 ( config.class , config.sec)
         for k, v in pairs(quotes.bid) do
-            buys:addQuote(v.price,tonumber(v.quantity))
+            buys:addQuote(v.price,v.quantity)
         end
 
         for k, v in pairs(quotes.offer) do
-            sales:addQuote(v.price,tonumber(v.quantity))
+            sales:addQuote(v.price,v.quantity)
         end
     end
 end
@@ -70,9 +70,9 @@ end
 function OnAllTrade( trade )                -- Прилетела обезличенная сделка
     if  trade.class_code == config.class   and trade.sec_code == config.sec then
         if bit.band( trade.flags, 1) ~= 0 then
-            sales:addTrade(trade.price, tonumber(trade.qty))
+            sales:addTrade(trade.price, trade.qty)
         else
-            buys:addTrade( trade.price, tonumber(trade.qty))
+            buys:addTrade( trade.price, trade.qty)
         end
     end
 end
