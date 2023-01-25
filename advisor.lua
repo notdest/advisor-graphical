@@ -4,8 +4,10 @@ dofile (getScriptPath() .. "\\markFunctions.lua")
 config  = {
     class       = "TQBR",
     sec         = "SBER",
-    minTrade    = 100,          -- Минимальная сделка отображаемая на графике
-    minQuote    = 1000          -- Минимальная ставка в стакане, отображаемая на графике
+    minTrade    = 4000,         -- Минимальная сделка отображаемая на графике
+    minQuote    = 1000,         -- Минимальная ставка в стакане, отображаемая на графике
+    minCenterTrade  = 100,      -- Минимум для отображения центра тяжести сделок
+    minCenterQuote  = 100       -- Минимум для отображения центра тяжести котировок
 }
 
 is_run = true
@@ -17,7 +19,10 @@ function main()
         date    = os.date("*t")
         sec     = tonumber(date.sec)
         if (sec < 1) and (lastSec > 0) then
-            drawMaxTrades()
+            drawCenterTrades()
+            --drawCenterQuotes()
+
+            --drawMaxTrades()
             drawMaxQuotes()
 
             sales:clear()
@@ -26,6 +31,31 @@ function main()
         lastSec = sec
 
         sleep(400)
+    end
+end
+
+function drawCenterTrades()
+    local price,quantity = sales:getCenterTrade()
+    if quantity > config.minCenterTrade then
+        markCenterSellTrade(price, quantity)
+    end
+
+    price,quantity = buys:getCenterTrade()
+    if quantity > config.minCenterTrade then
+        markCenterBuyTrade(price, quantity)
+    end
+end
+
+-- Выясняет и рисует центры тяжести котировок
+function drawCenterQuotes()
+    local price,quantity = sales:getCenterQuote()
+    if quantity > config.minCenterQuote then
+        markCenterSellQuote(price, quantity)
+    end
+
+    price,quantity = buys:getCenterQuote()
+    if quantity > config.minCenterQuote then
+        markCenterBuyQuote(price, quantity)
     end
 end
 
