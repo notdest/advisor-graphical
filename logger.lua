@@ -6,9 +6,11 @@
 
 logger = {}
 function logger:new()
+    date    = os.date("*t")
     newObj = {
         trades      = {},
-        quotes      = {}
+        quotes      = {},
+        time        = string.format("%02d%02d00" , date.hour,date.min)
     }
 
 
@@ -16,6 +18,10 @@ function logger:new()
     return setmetatable(newObj, self)
 end
 
+-- Минута, за которую собираются данные
+function logger:getTime()
+    return self.time
+end
 
 function logger:addTrade(price,quantity)
     price    = tonumber(price)
@@ -114,6 +120,8 @@ end
 
 -- мы периодически обнуляем накопленное
 function logger:clear()
+    date    = os.date("*t")
     self.trades = {}
     self.quotes = {}
+    self.time   = string.format("%02d%02d00" , date.hour,date.min)
 end

@@ -18,13 +18,11 @@ function main()
     while is_run do
         date    = os.date("*t")
         sec     = tonumber(date.sec)
+
+        drawCenterTrades()
+        drawMaxQuotes()
+
         if (sec < 1) and (lastSec > 0) then
-            drawCenterTrades()
-            --drawCenterQuotes()
-
-            --drawMaxTrades()
-            drawMaxQuotes()
-
             sales:clear()
             buys:clear()
         end
@@ -34,54 +32,90 @@ function main()
     end
 end
 
+-- Выясняет и рисует центры тяжести сделок
+oldT = {
+    sales = {
+        mark    = "",
+        time    = "",
+        markId  = 0
+    },
+    buys  = {
+        mark    = "",
+        time    = "",
+        markId  = 0
+    }
+}
 function drawCenterTrades()
     local price,quantity = sales:getCenterTrade()
-    if quantity > config.minCenterTrade then
-        markCenterSellTrade(price, quantity)
+    local time           = sales:getTime()
+    local mark           = quantity > config.minCenterTrade and math.floor(quantity/1000)..'' or ""
+    if ((oldT.sales.mark ~= mark) or ( oldT.sales.time ~= time)) and (mark ~= "") then
+        if oldT.sales.time == time then
+            DelLabel( "share", oldT.sales.markId)
+        end
+
+        oldT.sales.markId   = markCenterSellTrade(price, quantity,time)
+
+        oldT.sales.mark     = mark
+        oldT.sales.time     = time
     end
+
 
     price,quantity = buys:getCenterTrade()
-    if quantity > config.minCenterTrade then
-        markCenterBuyTrade(price, quantity)
-    end
-end
+    time           = buys:getTime()
+    mark           = quantity > config.minCenterTrade and math.floor(quantity/1000)..'' or ""
+    if (( oldT.buys.mark ~= mark) or (oldT.buys.time ~= time)) and (mark ~= "") then
+        if oldT.buys.time == time then
+            DelLabel( "share", oldT.buys.markId)
+        end
 
--- Выясняет и рисует центры тяжести котировок
-function drawCenterQuotes()
-    local price,quantity = sales:getCenterQuote()
-    if quantity > config.minCenterQuote then
-        markCenterSellQuote(price, quantity)
-    end
+        oldT.buys.markId = markCenterBuyTrade(price, quantity,time)
 
-    price,quantity = buys:getCenterQuote()
-    if quantity > config.minCenterQuote then
-        markCenterBuyQuote(price, quantity)
+        oldT.buys.mark    = mark
+        oldT.buys.time    = time
     end
 end
 
 -- Выясняет и рисует максимальные котировки
+oldQ = {
+    sales = {
+        mark    = "",
+        time    = "",
+        markId  = 0
+    },
+    buys  = {
+        mark    = "",
+        time    = "",
+        markId  = 0
+    }
+}
 function drawMaxQuotes()
     local price,quantity = sales:getMaxQuote()
-    if quantity > config.minQuote then
-        markSellQuote(price, quantity)
+    local time           = sales:getTime()
+    local mark           = quantity > config.minQuote and math.floor(quantity/1000)..'' or ""
+    if ((oldQ.sales.mark ~= mark) or ( oldQ.sales.time ~= time)) and (mark ~= "") then
+        if oldQ.sales.time == time then
+            DelLabel( "share", oldQ.sales.markId)
+        end
+
+        oldQ.sales.markId   = markSellQuote(price, quantity,time)
+
+        oldQ.sales.mark = mark
+        oldQ.sales.time = time
     end
 
     price,quantity = buys:getMaxQuote()
-    if quantity > config.minQuote then
-        markBuyQuote(price, quantity)
-    end
-end
+    time           = buys:getTime()
+    mark           = quantity > config.minQuote and math.floor(quantity/1000)..'' or ""
+    if (( oldQ.buys.mark ~= mark) or (oldQ.buys.time ~= time)) and (mark ~= "") then
+        if oldQ.buys.time == time then
+            DelLabel( "share", oldQ.buys.markId)
+        end
 
--- выясняет и рисует максимальные сделки
-function drawMaxTrades()
-    local price,quantity = sales:getMaxTrade()
-    if quantity > config.minTrade then
-        markSellTrade(price, quantity)
-    end
+        oldQ.buys.markId    = markBuyQuote(price, quantity,time)
 
-    price,quantity = buys:getMaxTrade()
-    if quantity > config.minTrade then
-        markBuyTrade(price, quantity)
+        oldQ.buys.mark  = mark
+        oldQ.buys.time  = time
     end
 end
 
@@ -89,7 +123,6 @@ function OnQuote(class, sec )
     if class == config.class and sec == config.sec then
         local quotes = getQuoteLevel2 ( config.class , config.sec)
         if quotes.bid ~= nil and quotes.bid ~= "" then
-            message(quotes.bid)
             for k, v in pairs(quotes.bid) do
                 buys:addQuote(v.price,v.quantity)
             end
