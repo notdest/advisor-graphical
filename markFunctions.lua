@@ -1,7 +1,7 @@
 -- сюда вынес отрисовку метод, потому что это по большому счёту настройки цвета/шрифтов
 
 function markSellQuote(price,volume,time)
-    return AddLabel("share",{
+    return AddLabel(config.chartTag, {
         TEXT        = math.floor(volume/1000)..'',
         IMAGE_PATH  = "",
 
@@ -24,7 +24,7 @@ function markSellQuote(price,volume,time)
 end
 
 function markBuyQuote(price,volume,time)
-    return AddLabel("share",{
+    return AddLabel(config.chartTag, {
         TEXT        = math.floor(volume/1000)..'',
         IMAGE_PATH  = "",
 
@@ -47,7 +47,7 @@ function markBuyQuote(price,volume,time)
 end
 
 function markCenterSellTrade(price,volume,time)
-    return AddLabel("share",{
+    return AddLabel(config.chartTag, {
         TEXT        = math.floor(volume/1000)..'',
         IMAGE_PATH  = "",
 
@@ -70,7 +70,7 @@ function markCenterSellTrade(price,volume,time)
 end
 
 function markCenterBuyTrade(price,volume,time)
-    return AddLabel("share",{
+    return AddLabel(config.chartTag, {
         TEXT        = math.floor(volume/1000)..'',
         IMAGE_PATH  = "",
 

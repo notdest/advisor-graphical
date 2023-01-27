@@ -1,14 +1,7 @@
 dofile (getScriptPath() .. "\\logger.lua")
 dofile (getScriptPath() .. "\\markFunctions.lua")
+dofile (getScriptPath() .. "\\config.lua")
 
-config  = {
-    class       = "TQBR",
-    sec         = "SBER",
-    minTrade    = 4000,         -- Минимальная сделка отображаемая на графике
-    minQuote    = 1000,         -- Минимальная ставка в стакане, отображаемая на графике
-    minCenterTrade  = 100,      -- Минимум для отображения центра тяжести сделок
-    minCenterQuote  = 100       -- Минимум для отображения центра тяжести котировок
-}
 
 is_run = true
 
@@ -51,7 +44,7 @@ function drawCenterTrades()
     local mark           = quantity > config.minCenterTrade and math.floor(quantity/1000)..'' or ""
     if ((oldT.sales.mark ~= mark) or ( oldT.sales.time ~= time)) and (mark ~= "") then
         if oldT.sales.time == time then
-            DelLabel( "share", oldT.sales.markId)
+            DelLabel( config.chartTag, oldT.sales.markId)
         end
 
         oldT.sales.markId   = markCenterSellTrade(price, quantity,time)
@@ -66,7 +59,7 @@ function drawCenterTrades()
     mark           = quantity > config.minCenterTrade and math.floor(quantity/1000)..'' or ""
     if (( oldT.buys.mark ~= mark) or (oldT.buys.time ~= time)) and (mark ~= "") then
         if oldT.buys.time == time then
-            DelLabel( "share", oldT.buys.markId)
+            DelLabel( config.chartTag, oldT.buys.markId)
         end
 
         oldT.buys.markId = markCenterBuyTrade(price, quantity,time)
@@ -95,7 +88,7 @@ function drawMaxQuotes()
     local mark           = quantity > config.minQuote and math.floor(quantity/1000)..'' or ""
     if ((oldQ.sales.mark ~= mark) or ( oldQ.sales.time ~= time)) and (mark ~= "") then
         if oldQ.sales.time == time then
-            DelLabel( "share", oldQ.sales.markId)
+            DelLabel( config.chartTag, oldQ.sales.markId)
         end
 
         oldQ.sales.markId   = markSellQuote(price, quantity,time)
@@ -109,7 +102,7 @@ function drawMaxQuotes()
     mark           = quantity > config.minQuote and math.floor(quantity/1000)..'' or ""
     if (( oldQ.buys.mark ~= mark) or (oldQ.buys.time ~= time)) and (mark ~= "") then
         if oldQ.buys.time == time then
-            DelLabel( "share", oldQ.buys.markId)
+            DelLabel( config.chartTag, oldQ.buys.markId)
         end
 
         oldQ.buys.markId    = markBuyQuote(price, quantity,time)
