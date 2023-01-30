@@ -41,7 +41,7 @@ oldT = {
 function drawCenterTrades()
     local price,quantity = sales:getCenterTrade()
     local time           = sales:getTime()
-    local mark           = quantity > config.minCenterTrade and math.floor(quantity/1000)..'' or ""
+    local mark           = quantity > config.minCenterTrade and math.floor(quantity/config.multiplier)..'' or ""
     if ((oldT.sales.mark ~= mark) or ( oldT.sales.time ~= time)) and (mark ~= "") then
         if oldT.sales.time == time then
             DelLabel( config.chartTag, oldT.sales.markId)
@@ -56,7 +56,7 @@ function drawCenterTrades()
 
     price,quantity = buys:getCenterTrade()
     time           = buys:getTime()
-    mark           = quantity > config.minCenterTrade and math.floor(quantity/1000)..'' or ""
+    mark           = quantity > config.minCenterTrade and math.floor(quantity/config.multiplier)..'' or ""
     if (( oldT.buys.mark ~= mark) or (oldT.buys.time ~= time)) and (mark ~= "") then
         if oldT.buys.time == time then
             DelLabel( config.chartTag, oldT.buys.markId)
@@ -85,7 +85,7 @@ oldQ = {
 function drawMaxQuotes()
     local price,quantity = sales:getMaxQuote()
     local time           = sales:getTime()
-    local mark           = quantity > config.minQuote and math.floor(quantity/1000)..'' or ""
+    local mark           = quantity > config.minQuote and math.floor(quantity/config.multiplier)..'' or ""
     if ((oldQ.sales.mark ~= mark) or ( oldQ.sales.time ~= time)) and (mark ~= "") then
         if oldQ.sales.time == time then
             DelLabel( config.chartTag, oldQ.sales.markId)
@@ -99,7 +99,7 @@ function drawMaxQuotes()
 
     price,quantity = buys:getMaxQuote()
     time           = buys:getTime()
-    mark           = quantity > config.minQuote and math.floor(quantity/1000)..'' or ""
+    mark           = quantity > config.minQuote and math.floor(quantity/config.multiplier)..'' or ""
     if (( oldQ.buys.mark ~= mark) or (oldQ.buys.time ~= time)) and (mark ~= "") then
         if oldQ.buys.time == time then
             DelLabel( config.chartTag, oldQ.buys.markId)

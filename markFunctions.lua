@@ -2,7 +2,7 @@
 
 function markSellQuote(price,volume,time)
     return AddLabel(config.chartTag, {
-        TEXT        = math.floor(volume/1000)..'',
+        TEXT        = math.floor(volume/config.multiplier)..'',
         IMAGE_PATH  = "",
 
         ALIGNMENT   = "TOP",
@@ -25,7 +25,7 @@ end
 
 function markBuyQuote(price,volume,time)
     return AddLabel(config.chartTag, {
-        TEXT        = math.floor(volume/1000)..'',
+        TEXT        = math.floor(volume/config.multiplier)..'',
         IMAGE_PATH  = "",
 
         ALIGNMENT   = "BOTTOM",
@@ -48,7 +48,7 @@ end
 
 function markCenterSellTrade(price,volume,time)
     return AddLabel(config.chartTag, {
-        TEXT        = math.floor(volume/1000)..'',
+        TEXT        = math.floor(volume/config.multiplier)..'',
         IMAGE_PATH  = "",
 
         ALIGNMENT   = "TOP",
@@ -71,7 +71,7 @@ end
 
 function markCenterBuyTrade(price,volume,time)
     return AddLabel(config.chartTag, {
-        TEXT        = math.floor(volume/1000)..'',
+        TEXT        = math.floor(volume/config.multiplier)..'',
         IMAGE_PATH  = "",
 
         ALIGNMENT   = "BOTTOM",
